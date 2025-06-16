@@ -4,6 +4,23 @@ from datetime import date
 from db import connect_db
 from models import Transaction, add_transaction
 
+import os
+
+st.subheader("🔄 Sync to macOS SQLite")
+
+if os.path.exists("data.db"):
+    with open("data.db", "rb") as db_file:
+        st.download_button(
+            label="📥 Sync to SQLite (macOS)",
+            data=db_file,
+            file_name="data.db",
+            mime="application/octet-stream",
+            help="Download this file and move it to your local moneymanager folder to sync with local SQLite"
+        )
+else:
+    st.error("Database file not found in the cloud app.")
+
+
 # Page config
 st.set_page_config(page_title="💰 Money Manager", layout="wide")
 st.title("💸 Money Manager Dashboard")
