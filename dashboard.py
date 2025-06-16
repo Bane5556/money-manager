@@ -57,7 +57,7 @@ with st.form("add_transaction_form"):
         add_transaction(new_tx)
         st.cache_data.clear()  # Clear cached data
         st.success("✅ Transaction added!")
-        st.experimental_rerun()  # Rerun to refresh UI immediately
+        st.rerun()  # Rerun to refresh UI immediately
 
 # 📊 Load and display transactions
 df = load_data()
