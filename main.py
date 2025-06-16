@@ -2,17 +2,10 @@ from db import init_db, connect_db
 from models import Transaction
 from utils import export_to_csv
 from utils import show_category_pie_chart
+from models import add_transaction
 
 
 
-def add_transaction(tx):
-    with connect_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO transactions (date, type, category, amount, person, notes)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (tx.date, tx.type, tx.category, tx.amount, tx.person, tx.notes))
-        conn.commit()
 
 def view_transactions():
     with connect_db() as conn:

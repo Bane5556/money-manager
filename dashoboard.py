@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 from db import connect_db
+from datetime import date
+from main import Transaction, add_transaction
+
+
 
 st.set_page_config(page_title="💰 Money Manager", layout="wide")
 st.title("💸 Money Manager Dashboard")
@@ -10,6 +14,7 @@ def load_data():
     with connect_db() as conn:
         df = pd.read_sql_query("SELECT * FROM transactions", conn)
     return df
+
 
 df = load_data()
 
@@ -35,3 +40,28 @@ else:
     st.subheader("📊 Spending by Category")
     cat_group = df[df["type"] == "Spend"].groupby("category")["amount"].sum()
     st.bar_chart(cat_group)
+st.header("➕ Add New Transaction")
+
+with st.form("add_transaction_form"):
+    tx_date = st.date_input("Date", value=date.today())
+    tx_type = st.selectbox("Type", ["Spend", "Borrow", "Lend"])
+    tx_category = st.text_input("Category", placeholder="e.g. Food, Rent")
+    tx_amount = st.number_input("Amount", min_value=0.0, format="%.2f")
+    tx_person = st.text_input("Person (optional)")
+    tx_notes = st.text_area("Notes (optional)")
+
+    submitted = st.form_submit_button("Add Transaction")
+
+    if submitted:
+        # Create a transaction object
+        new_tx = Transaction(
+            date=tx_date.strftime("%Y-%m-%d"),
+            t_type=tx_type,
+            category=tx_category,
+            amount=tx_amount,
+            person=tx_person,
+            notes=tx_notes
+        )
+        add_transaction(new_tx)
+        st.success("✅ Transaction added!")
+
