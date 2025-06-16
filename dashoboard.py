@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from db import connect_db
 from datetime import date
-from main import Transaction, add_transaction
+from models import Transaction, add_transaction
 
 
 
